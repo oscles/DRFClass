@@ -16,21 +16,15 @@ class SnippetSerializer(serializers.Serializer):
 
 class SnippetModelSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    user_detail = serializers.SerializerMethodField()
-    user_detail2 = NameUserSerializer()
     full_name = serializers.SerializerMethodField()
     created_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Snippet
-        fields = ('id', 'title', 'code', 'lang', 'user', 'full_name', 'created_count', 'user_detail')
+        fields = ('id', 'title', 'code', 'lang', 'user', 'full_name', 'created_count',)
 
     def get_full_name(self, obj):
         return obj.user.get_full_name()
 
     def get_created_count(self, obj):
         return obj.user.snippet_set.count()
-
-
-    def get_user_detail(self, obj):
-        return NameUserSerializer(obj).data
